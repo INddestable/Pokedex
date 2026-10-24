@@ -3,72 +3,95 @@ import { View, Text, Image, Pressable, ScrollView, StyleSheet } from "react-nati
 import { SafeAreaView } from "react-native-safe-area-context"
 import ArrowIcon from "./icons/ArrowIcon"
 import { formatName } from "../utils/formatName"
+import {
+  colors, fonts, pixelBorder, pixelShadow, TYPE_COLORS,
+} from "../theme"
+
+const TOTAL_BLOCKS = 15
+const MAX_STAT = 180
 
 export default function PokeDetails({ pokemon, onBack }) {
 const image =
     pokemon.sprites.other["official-artwork"].front_default ?? null
 
   return (
-    <>
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.header}>
           <Pressable
             onPress={onBack}
-            style={({ pressed }) => [styles.iconBtn, pressed && { opacity: 0.6 }]}
-            accessibilityLabel="Volver a la Pokédex"
+            style={({ pressed }) => [
+              styles.iconBtn,
+              pressed && styles.iconBtnPressed,
+            ]}
+            accessibilityLabel="Back to Pokédex"
           >
-            <ArrowIcon size={22} />
+            <ArrowIcon size={20} color={colors.ink} />
           </Pressable>
-          <Text style={styles.eyebrow}>Pokédex nacional</Text>
-          <Text style={styles.number}>
+          <Text style={styles.eyebrow}>NATIONAL POKÉDEX</Text>
+          <Text style={styles.headerNumber}>
             #{String(pokemon.id).padStart(4, "0")}
           </Text>
         </View>
 
         <View style={styles.hero}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.eyebrow}>Pokémon seleccionado</Text>
-            <Text style={styles.title}>{formatName(pokemon.name)}</Text>
+            <Text style={styles.kicker}>SELECTED POKÉMON</Text>
+            <Text style={styles.title} numberOfLines={2}>
+              {formatName(pokemon.name)}
+            </Text>
             <View style={styles.typeRow}>
               {pokemon.types.map(({ type }) => (
-                <View key={type.name} style={styles.typePill}>
-                  <Text style={styles.typeText}>{formatName(type.name)}</Text>
+                <View
+                  key={type.name}
+                  style={[
+                    styles.typePill,
+                    { backgroundColor: TYPE_COLORS[type.name] ?? colors.gray },
+                  ]}
+                >
+                  <Text style={styles.typeText}>{type.name.toUpperCase()}</Text>
                 </View>
               ))}
             </View>
           </View>
           <View style={styles.imageWrap}>
             {image && (
-              <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+              <Image
+                source={{ uri: image }}
+                style={styles.image}
+                resizeMode="contain"
+              />
             )}
           </View>
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.kicker}>Información base</Text>
-          <Text style={styles.cardTitle}>Características</Text>
-          <View style={styles.measureGrid}>
-            <View style={styles.measure}>
-              <Text style={styles.measureValue}>{pokemon.height / 10} m</Text>
-              <Text style={styles.measureLabel}>Altura</Text>
-            </View>
-            <View style={styles.measure}>
-              <Text style={styles.measureValue}>{pokemon.weight / 10} kg</Text>
-              <Text style={styles.measureLabel}>Peso</Text>
-            </View>
-            <View style={styles.measure}>
-              <Text style={styles.measureValue}>{pokemon.base_experience}</Text>
-              <Text style={styles.measureLabel}>Experiencia</Text>
-            </View>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardHeaderText}>BASE INFO</Text>
           </View>
-          <View style={styles.abilities}>
-            <Text style={styles.measureLabel}>Habilidades</Text>
+          <View style={styles.cardBody}>
+            <Text style={styles.cardTitle}>CHARACTERISTICS</Text>
+            <View style={styles.measureGrid}>
+              <View style={styles.measure}>
+                <Text style={styles.measureValue}>{pokemon.height / 10} m</Text>
+                <Text style={styles.measureLabel}>HEIGHT</Text>
+              </View>
+              <View style={styles.measure}>
+                <Text style={styles.measureValue}>{pokemon.weight / 10} kg</Text>
+                <Text style={styles.measureLabel}>WEIGHT</Text>
+              </View>
+              <View style={styles.measure}>
+                <Text style={styles.measureValue}>{pokemon.base_experience}</Text>
+                <Text style={styles.measureLabel}>BASE EXP</Text>
+              </View>
+            </View>
+            <View style={styles.divider} />
+            <Text style={styles.measureLabel}>ABILITIES</Text>
             <Text style={styles.abilitiesText}>
               {pokemon.abilities
                 .map(
                   ({ ability, is_hidden }) =>
-                    `${formatName(ability.name)}${is_hidden ? " (oculta)" : ""}`
+                    `${formatName(ability.name)}${is_hidden ? " (hidden)" : ""}`
                 )
                 .join(" · ")}
             </Text>
@@ -76,79 +99,219 @@ const image =
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.kicker}>Rendimiento</Text>
-          <Text style={styles.cardTitle}>Estadísticas base</Text>
-          <View style={styles.stats}>
-            {pokemon.stats.map(({ base_stat, stat }) => (
-              <View key={stat.name} style={styles.statRow}>
-                <Text style={styles.statName}>{formatName(stat.name)}</Text>
-                <View style={styles.track}>
-                  <View
-                    style={[
-                      styles.fill,
-                      { width: `${Math.min((base_stat / 180) * 100, 100)}%` },
-                    ]}
-                  />
-                </View>
-                <Text style={styles.statValue}>{base_stat}</Text>
-              </View>
-            ))}
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardHeaderText}>PERFORMANCE</Text>
+          </View>
+          <View style={styles.cardBody}>
+            <Text style={styles.cardTitle}>BASE STATS</Text>
+            <View style={styles.stats}>
+              {pokemon.stats.map(({ base_stat, stat }) => {
+                const filled = Math.round(
+                  (base_stat / MAX_STAT) * TOTAL_BLOCKS
+                )
+                return (
+                  <View key={stat.name} style={styles.statRow}>
+                    <Text style={styles.statName}>
+                      {formatName(stat.name).toUpperCase()}
+                    </Text>
+                    <View style={styles.blocks}>
+                      {Array.from({ length: TOTAL_BLOCKS }).map((_, i) => (
+                        <View
+                          key={i}
+                          style={[
+                            styles.block,
+                            i < filled
+                              ? styles.blockFilled
+                              : styles.blockEmpty,
+                          ]}
+                        />
+                      ))}
+                    </View>
+                    <Text style={styles.statValue}>{base_stat}</Text>
+                  </View>
+                )
+              })}
+            </View>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
-    </>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#fff" },
-  container: { padding: 20, paddingBottom: 40 },
+safe: { flex: 1, backgroundColor: colors.bg },
+  container: { padding: 16, paddingBottom: 40 },
+
   header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  iconBtn: { padding: 8 },
-  eyebrow: { fontSize: 11, color: "#888", letterSpacing: 1.5 },
-  number: { fontSize: 13, color: "#aaa", fontWeight: "600" },
-  hero: { flexDirection: "row", alignItems: "center", marginBottom: 24 },
-  title: { fontSize: 30, fontWeight: "800", marginTop: 4 },
-  typeRow: { flexDirection: "row", gap: 8, marginTop: 10 },
-  typePill: {
-    backgroundColor: "#eef",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-  },
-  typeText: { fontSize: 12, fontWeight: "600", color: "#335" },
-  imageWrap: { width: 130, height: 130, alignItems: "center", justifyContent: "center" },
-  image: { width: 130, height: 130 },
-  card: {
-    backgroundColor: "#f7f7f9",
-    borderRadius: 16,
-    padding: 16,
     marginBottom: 16,
   },
-  kicker: { fontSize: 11, color: "#888", letterSpacing: 1.5 },
-  cardTitle: { fontSize: 18, fontWeight: "800", marginBottom: 12 },
-  measureGrid: { flexDirection: "row", justifyContent: "space-between", marginBottom: 14 },
-  measure: { flex: 1 },
-  measureValue: { fontSize: 16, fontWeight: "700" },
-  measureLabel: { fontSize: 11, color: "#888", marginTop: 2 },
-  abilities: { marginTop: 6 },
-  abilitiesText: { fontSize: 13, color: "#333", marginTop: 4 },
-  stats: { gap: 10 },
-  statRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  statName: { width: 110, fontSize: 12, color: "#555" },
-  track: {
-    flex: 1,
-    height: 8,
-    backgroundColor: "#e2e2e8",
-    borderRadius: 4,
-    overflow: "hidden",
+  iconBtn: {
+    padding: 6,
+    backgroundColor: colors.paper,
+    ...pixelBorder,
+    ...pixelShadow,
   },
-  fill: { height: 8, backgroundColor: "#e33", borderRadius: 4 },
-  statValue: { width: 32, textAlign: "right", fontSize: 12, fontWeight: "700" },
+  iconBtnPressed: {
+    transform: [{ translateX: 3 }, { translateY: 3 }],
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 0,
+  },
+  eyebrow: {
+    fontFamily: fonts.regular,
+    fontSize: 11,
+    color: colors.gray,
+    letterSpacing: 2,
+  },
+  headerNumber: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.ink,
+  },
+
+  hero: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+    backgroundColor: colors.panel,
+    padding: 10,
+    ...pixelBorder,
+    ...pixelShadow,
+  },
+  kicker: {
+    fontFamily: fonts.regular,
+    fontSize: 11,
+    color: colors.gray,
+    letterSpacing: 2,
+    marginBottom: 4,
+  },
+  title: {
+    fontFamily: fonts.bold,
+    fontSize: 26,
+    color: colors.ink,
+    lineHeight: 28,
+  },
+  typeRow: {
+    flexDirection: "row",
+    gap: 6,
+    marginTop: 8,
+    flexWrap: "wrap",
+  },
+  typePill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    ...pixelBorder,
+  },
+  typeText: {
+    fontFamily: fonts.bold,
+    fontSize: 10,
+    color: colors.paper,
+    letterSpacing: 1,
+  },
+  imageWrap: {
+    width: 110,
+    height: 110,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  image: { width: 110, height: 110 },
+
+  card: {
+    backgroundColor: colors.paper,
+    marginBottom: 16,
+    ...pixelBorder,
+    ...pixelShadow,
+  },
+  cardHeader: {
+    backgroundColor: colors.panelHeader,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.ink,
+  },
+  cardHeaderText: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.paper,
+    letterSpacing: 2,
+  },
+  cardBody: {
+    padding: 12,
+    backgroundColor: colors.panel,
+  },
+  cardTitle: {
+    fontFamily: fonts.bold,
+    fontSize: 16,
+    color: colors.ink,
+    marginBottom: 10,
+    letterSpacing: 1,
+  },
+
+  measureGrid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  measure: { flex: 1 },
+  measureValue: {
+    fontFamily: fonts.bold,
+    fontSize: 18,
+    color: colors.ink,
+  },
+  measureLabel: {
+    fontFamily: fonts.regular,
+    fontSize: 10,
+    color: colors.gray,
+    letterSpacing: 1,
+    marginTop: 2,
+  },
+
+  divider: {
+    height: 3,
+    backgroundColor: colors.ink,
+    marginVertical: 12,
+  },
+  abilitiesText: {
+    fontFamily: fonts.regular,
+    fontSize: 13,
+    color: colors.ink,
+    marginTop: 4,
+    lineHeight: 18,
+  },
+
+  stats: { gap: 10 },
+  statRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  statName: {
+    width: 92,
+    fontFamily: fonts.bold,
+    fontSize: 10,
+    color: colors.ink,
+    letterSpacing: 1,
+  },
+  blocks: {
+    flex: 1,
+    flexDirection: "row",
+    gap: 2,
+  },
+  block: {
+    flex: 1,
+    height: 10,
+    borderWidth: 1,
+    borderColor: colors.ink,
+  },
+  blockFilled: { backgroundColor: colors.red },
+  blockEmpty: { backgroundColor: colors.paper },
+  statValue: {
+    width: 30,
+    textAlign: "right",
+    fontFamily: fonts.bold,
+    fontSize: 11,
+    color: colors.ink,
+  },
 })
