@@ -1,6 +1,7 @@
 import react from "react"
 import { View, Text, Image, Pressable, StyleSheet } from "react-native"
 import { formatName } from "../../utils/formatName"
+import { colors, fonts, pixelBorder, pixelShadow } from "../../theme"
 
 export default function FeaturedPokemon({ pokemon, onShowDetails }) {
   const image =
@@ -8,75 +9,129 @@ export default function FeaturedPokemon({ pokemon, onShowDetails }) {
 
   return (
     <View style={styles.wrap}>
-      <View style={styles.heading}>
-        <View>
-          <Text style={styles.kicker}>Selección actual</Text>
-          <Text style={styles.name}>
-            {pokemon ? formatName(pokemon.name) : "Cargando..."}
-          </Text>
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.headerLabel}>CURRENT SELECTION</Text>
+          {pokemon && (
+            <Text style={styles.headerNumber}>
+              #{String(pokemon.id).padStart(4, "0")}
+            </Text>
+          )}
         </View>
-        {pokemon && (
-          <Text style={styles.number}>
-            #{String(pokemon.id).padStart(4, "0")}
-          </Text>
-        )}
-      </View>
 
-      <Pressable
-        onPress={onShowDetails}
-        disabled={!pokemon}
-        style={({ pressed }) => [styles.stage, pressed && { opacity: 0.85 }]}
-        accessibilityLabel={
-          pokemon ? `Ver detalles de ${pokemon.name}` : "Cargando"
-        }
-      >
-        <View style={styles.circle} />
-        {image && (
-          <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
-        )}
-        <View style={styles.viewDetail}>
-          <Text style={styles.viewDetailText}>Ver ficha completa →</Text>
+        <View style={styles.stage}>
+          <View style={styles.circle} />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          )}
         </View>
-      </Pressable>
+
+        <View style={styles.cardFooter}>
+          <Text style={styles.name} numberOfLines={1}>
+            {pokemon ? formatName(pokemon.name) : "LOADING..."}
+          </Text>
+          <Pressable
+            onPress={onShowDetails}
+            disabled={!pokemon}
+            style={({ pressed }) => [
+              styles.detailBtn,
+              pressed && styles.detailBtnPressed,
+              !pokemon && styles.detailBtnDisabled,
+            ]}
+          >
+            <Text style={styles.detailBtnText}>VIEW DETAILS ▶</Text>
+          </Pressable>
+        </View>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  wrap: { paddingHorizontal: 20, marginBottom: 24 },
-  heading: {
+  wrap: { marginBottom: 20 },
+
+  card: {
+    backgroundColor: colors.panel,
+    ...pixelBorder,
+    ...pixelShadow,
+  },
+
+  cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginBottom: 12,
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: colors.panelHeader,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.ink,
   },
-  kicker: { fontSize: 11, color: "#888", letterSpacing: 1.5 },
-  name: { fontSize: 22, fontWeight: "800" },
-  number: { fontSize: 13, color: "#aaa", fontWeight: "600" },
+  headerLabel: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.paper,
+    letterSpacing: 2,
+  },
+  headerNumber: {
+    fontFamily: fonts.regular,
+    fontSize: 12,
+    color: colors.yellow,
+  },
+
   stage: {
-    backgroundColor: "#f5f5f7",
-    borderRadius: 20,
-    height: 260,
+    height: 220,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.paper,
+    borderBottomWidth: 3,
+    borderBottomColor: colors.ink,
     overflow: "hidden",
   },
   circle: {
     position: "absolute",
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    backgroundColor: "#e8e8ec",
+    width: 170,
+    height: 170,
+    borderRadius: 85,
+    backgroundColor: colors.panel,
+    borderWidth: 3,
+    borderColor: colors.grayLight,
   },
-  image: { width: 200, height: 200 },
-  viewDetail: {
-    position: "absolute",
-    bottom: 14,
-    right: 14,
-    backgroundColor: "#111",
-    paddingHorizontal: 12,
+  image: { width: 180, height: 180 },
+
+  cardFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 10,
+    gap: 8,
+  },
+  name: {
+    flex: 1,
+    fontFamily: fonts.bold,
+    fontSize: 18,
+    color: colors.ink,
+  },
+  detailBtn: {
+    backgroundColor: colors.red,
+    paddingHorizontal: 10,
     paddingVertical: 6,
-    borderRadius: 999,
+    ...pixelBorder,
+    ...pixelShadow,
   },
-  viewDetailText: { color: "#fff", fontSize: 12, fontWeight: "600" },
+  detailBtnPressed: {
+    transform: [{ translateX: 3 }, { translateY: 3 }],
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 0,
+  },
+  detailBtnDisabled: { opacity: 0.4 },
+  detailBtnText: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.paper,
+    letterSpacing: 1,
+  },
 })

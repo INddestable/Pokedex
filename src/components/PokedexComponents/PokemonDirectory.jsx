@@ -1,11 +1,12 @@
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet } from "react-native"
 import SearchIcon from "../icons/SearchIcon"
 import { formatName } from "../../utils/formatName"
+import { colors, fonts, pixelBorder } from "../../theme"
 
 export default function PokemonDirectory({
   list, listQuery, onListQueryChange, activeId, onSelect, listRef, header,
 }) {
-const renderItem = ({ item }) => {
+  const renderItem = ({ item }) => {
     const id = Number(item.url.split("/").filter(Boolean).pop())
     const active = activeId === id
     return (
@@ -14,38 +15,23 @@ const renderItem = ({ item }) => {
         style={({ pressed }) => [
           styles.row,
           active && styles.rowActive,
-          pressed && { opacity: 0.7 },
+          pressed && styles.rowPressed,
         ]}
       >
-        <Text style={styles.rowNumber}>#{String(id).padStart(4, "0")}</Text>
-        <Text style={styles.rowName}>{formatName(item.name)}</Text>
-        <Text style={styles.rowArrow}>→</Text>
+        <Text style={[styles.rowNumber, active && styles.rowActiveText]}>
+          #{String(id).padStart(4, "0")}
+        </Text>
+        <Text style={[styles.rowName, active && styles.rowActiveText]}>
+          {formatName(item.name)}
+        </Text>
+        <Text style={[styles.rowArrow, active && styles.rowActiveText]}>▶</Text>
       </Pressable>
     )
   }
-
   return (
     <View style={styles.wrap}>
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.kicker}>Directorio</Text>
-          <Text style={styles.title}>Todos los Pokémon</Text>
-        </View>
-      </View>
 
-      <View style={styles.searchBox}>
-        <SearchIcon size={16} color="#888" />
-        <TextInput
-          value={listQuery}
-          onChangeText={onListQueryChange}
-          placeholder="Filtrar la lista"
-          placeholderTextColor="#999"
-          style={styles.input}
-          autoCapitalize="none"
-        />
-      </View>
-
-    <FlatList
+<FlatList
       ref={listRef}
       data={list}
       keyExtractor={(item) => item.name}
@@ -53,27 +39,25 @@ const renderItem = ({ item }) => {
       ListHeaderComponent={
         <>
           {header}
-          <View style={styles.listHeader}>
-            <Text style={styles.kicker}>Directorio</Text>
-            <Text style={styles.title}>Todos los Pokémon</Text>
+          <View style={styles.dirHeader}>
+            <Text style={styles.dirKicker}>DIRECTORY</Text>
+            <Text style={styles.dirTitle}>ALL POKÉMON</Text>
           </View>
           <View style={styles.searchBox}>
-            <SearchIcon size={16} color="#888" />
+            <SearchIcon size={16} color={colors.ink} />
             <TextInput
               value={listQuery}
               onChangeText={onListQueryChange}
-              placeholder="Filtrar la lista"
-              placeholderTextColor="#999"
+              placeholder="Filter list..."
+              placeholderTextColor={colors.gray}
               style={styles.input}
               autoCapitalize="none"
             />
           </View>
         </>
       }
-      ListEmptyComponent={
-        <Text style={styles.empty}>No hay Pokémon que coincidan.</Text>
-      }
-      contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 40 }}
+      ListEmptyComponent={<Text style={styles.empty}>NO POKÉMON MATCH.</Text>}
+      contentContainerStyle={styles.content}
       initialNumToRender={20}
       windowSize={10}
       removeClippedSubviews
@@ -83,31 +67,80 @@ const renderItem = ({ item }) => {
 }
 
 const styles = StyleSheet.create({
-  wrap: { flex: 1, paddingHorizontal: 20 },
-  header: { marginBottom: 12 },
-  kicker: { fontSize: 11, color: "#888", letterSpacing: 1.5 },
-  title: { fontSize: 20, fontWeight: "800" },
+  content: { paddingHorizontal: 16, paddingBottom: 40 },
+
+  dirHeader: { marginTop: 8, marginBottom: 10 },
+  dirKicker: {
+    fontFamily: fonts.regular,
+    fontSize: 11,
+    color: colors.gray,
+    letterSpacing: 2,
+  },
+  dirTitle: {
+    fontFamily: fonts.bold,
+    fontSize: 22,
+    color: colors.ink,
+  },
+
   searchBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f2f2f4",
-    borderRadius: 12,
+    gap: 8,
+    backgroundColor: colors.paper,
     paddingHorizontal: 10,
-    marginBottom: 10,
-    gap: 6,
+    marginBottom: 12,
+    ...pixelBorder,
   },
-  input: { flex: 1, paddingVertical: 8, fontSize: 13 },
+  input: {
+    flex: 1,
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    color: colors.ink,
+    paddingVertical: 8,
+  },
+
   row: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ddd",
-    gap: 12,
+    gap: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    marginBottom: 6,
+    backgroundColor: colors.paper,
+    ...pixelBorder,
   },
-  rowActive: { backgroundColor: "#fff3f3" },
-  rowNumber: { width: 60, color: "#aaa", fontSize: 12, fontWeight: "600" },
-  rowName: { flex: 1, fontSize: 15, fontWeight: "600" },
-  rowArrow: { color: "#999" },
-  empty: { textAlign: "center", color: "#888", marginTop: 20 },
-})
+  rowActive: {
+    backgroundColor: colors.red,
+  },
+  rowPressed: {
+    backgroundColor: colors.panel,
+  },
+  rowNumber: {
+    width: 66,
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.gray,
+  },
+  rowName: {
+    flex: 1,
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    color: colors.ink,
+  },
+  rowArrow: {
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.gray,
+  },
+  rowActiveText: { color: colors.paper },
+
+  empty: {
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.gray,
+    textAlign: "center",
+    marginTop: 24,
+    letterSpacing: 1,
+  },
+}
+)

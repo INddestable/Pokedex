@@ -4,6 +4,7 @@ import Hero from "./PokedexComponents/Hero"
 import FeaturedPokemon from "./PokedexComponents/FeaturedPokemon"
 import PokemonDirectory from "./PokedexComponents/PokemonDirectory"
 import { fetchPokemon, fetchPokemonList } from "../services/pokemonService"
+import { colors } from "../theme"
 
 export default function Pokedex({ onShowDetails }) {
   const [pokemonList, setPokemonList] = useState([])
@@ -22,7 +23,7 @@ export default function Pokedex({ onShowDetails }) {
       setPokemon(data)
       setQuery("")
     } catch {
-      setError("No encontramos ese Pokémon. Revisa el nombre o el ID.")
+      setError("Pokémon not found. Check the name or ID.")
     } finally {
       setLoading(false)
     }
@@ -34,7 +35,7 @@ export default function Pokedex({ onShowDetails }) {
         setPokemonList(list)
         setPokemon(initialPokemon)
       })
-      .catch(() => setError("No se pudo conectar con PokéAPI."))
+      .catch(() => setError("Could not connect to PokéAPI."))
       .finally(() => setLoading(false))
   }, [])
 
@@ -86,5 +87,5 @@ export default function Pokedex({ onShowDetails }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
+  container: { flex: 1, backgroundColor: colors.bg, marginTop: 60},
 })
