@@ -1,12 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Pokedex from "./src/components/Pokedex"
-
+import { NavigationContainer } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import PokedexStack from './src/navigation/PokedexStack';
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Pokedex></Pokedex>
-    </View>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <PokedexStack />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 

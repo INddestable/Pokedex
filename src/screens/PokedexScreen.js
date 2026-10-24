@@ -1,8 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigation } from "@react-navigation/native"
+import Pokedex from "../components/Pokedex"
 
-export const PokedexScreen = () => {
-  return (
-    <>
-    </>
+export default function PokedexScreen() {
+  const navigation = useNavigation()
+  return( 
+    <Pokedex onShowDetails={(pokemon) =>
+      navigation.navigate("PokeDetails", { pokemon })} />
+
   )
 }

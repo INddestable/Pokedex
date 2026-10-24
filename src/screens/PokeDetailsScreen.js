@@ -1,8 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigation, useRoute } from "@react-navigation/native"
+import PokeDetails from "../components/PokeDetails"
 
-export const PokeDetailsScreen = () => {
+export default function PokeDetailsScreen() {
+  const navigation = useNavigation()
+  const { params } = useRoute()
   return (
-    <>
-    </>
+  <PokeDetails pokemon={params.pokemon} onBack={() => navigation.goBack()} />
   )
 }
