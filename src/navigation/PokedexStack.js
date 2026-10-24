@@ -6,10 +6,8 @@ import PokedexScreen from '../screens/PokedexScreen';
 
 const Stack = createNativeStackNavigator();
 export default function PokedexStack() {
-  console.log("PokedexScreen:", PokedexScreen)
-  console.log("PokeDetailsScreen:", PokeDetailsScreen)
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="Pokedex"
         component={PokedexScreen}

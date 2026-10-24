@@ -6,6 +6,5 @@ export default function PokedexScreen() {
   return( 
     <Pokedex onShowDetails={(pokemon) =>
       navigation.navigate("PokeDetails", { pokemon })} />
-
   )
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native"
 import SearchIcon from "../icons/SearchIcon"
+import { colors, fonts, pixelBorder, pixelShadow } from "../../theme"
 
 export default function Hero({ query, setQuery, loading, error, onSubmit }) {
   return (
@@ -12,92 +13,204 @@ export default function Hero({ query, setQuery, loading, error, onSubmit }) {
           </View>
           <Text style={styles.brandText}>POKÉDEX</Text>
         </View>
-        <Text style={styles.regionLabel}>Kanto → Paldea</Text>
+        <Text style={styles.regionLabel}>KANTO → PALDEA</Text>
       </View>
 
       <View style={styles.heroCopy}>
-        <Text style={styles.eyebrow}>Explora · Descubre · Colecciona</Text>
+        <Text style={styles.eyebrow}>EXPLORE · DISCOVER · COLLECT</Text>
         <Text style={styles.title}>
-          Encuentra a tu{"\n"}
-          <Text style={styles.titleEm}>Pokémon</Text> favorito.
+          FIND YOUR{"\n"}
+          <Text style={styles.titleEm}>POKÉMON</Text>.
         </Text>
         <Text style={styles.subtitle}>
-          Busca por nombre o número de Pokédex y descubre todos sus datos.
+          Search by name or Pokédex number.
         </Text>
       </View>
 
-      <View style={styles.searchBox}>
-        <SearchIcon size={18} color="#888" />
-        <TextInput
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Ej. Pikachu o 025"
-          placeholderTextColor="#999"
-          style={styles.input}
-          autoCapitalize="none"
-          returnKeyType="search"
-          onSubmitEditing={onSubmit}
-        />
+      <View style={styles.searchRow}>
+        <View style={styles.searchBox}>
+          <SearchIcon size={18} color={colors.ink} />
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            placeholder="e.g. Pikachu or 025"
+            placeholderTextColor={colors.gray}
+            style={styles.input}
+            autoCapitalize="none"
+            returnKeyType="search"
+            onSubmitEditing={onSubmit}
+          />
+        </View>
         <Pressable
           onPress={onSubmit}
           disabled={loading}
           style={({ pressed }) => [
-            styles.searchBtn,
-            (pressed || loading) && styles.searchBtnPressed,
+            styles.button,
+            pressed && styles.buttonPressed,
+            loading && styles.buttonDisabled,
           ]}
         >
-          <Text style={styles.searchBtnText}>Buscar</Text>
+          <Text style={styles.buttonText}>SEARCH</Text>
         </Pressable>
       </View>
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? (
+        <View style={styles.errorBox}>
+          <Text style={styles.errorText}>! {error}</Text>
+        </View>
+      ) : null}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  hero: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 24 },
+  hero: { paddingTop: 12, paddingBottom: 20 },
+
   nav: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 28,
+    marginBottom: 24,
   },
   brand: { flexDirection: "row", alignItems: "center", gap: 8 },
-  brandMark: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: "#e33",
-    alignItems: "center",
-    justifyContent: "center",
+  brandText: {
+    fontFamily: fonts.bold,
+    fontSize: 20,
+    color: colors.ink,
+    letterSpacing: 1,
   },
-  brandDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: "#e33" },
-  brandText: { fontWeight: "700", letterSpacing: 2, fontSize: 13 },
-  regionLabel: { fontSize: 11, color: "#888" },
+
+  // Pokéball hecha solo con Views
+  pokeball: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 3,
+    borderColor: colors.ink,
+    overflow: "hidden",
+    position: "relative",
+    backgroundColor: colors.paper,
+  },
+  pokeballTop: {
+    position: "absolute",
+    top: 0, left: 0, right: 0,
+    height: "50%",
+    backgroundColor: colors.red,
+  },
+  pokeballBottom: {
+    position: "absolute",
+    bottom: 0, left: 0, right: 0,
+    height: "50%",
+    backgroundColor: colors.paper,
+  },
+  pokeballBand: {
+    position: "absolute",
+    top: "50%",
+    marginTop: -2,
+    left: 0, right: 0,
+    height: 4,
+    backgroundColor: colors.ink,
+  },
+  pokeballCenter: {
+    position: "absolute",
+    top: "50%", left: "50%",
+    marginTop: -5, marginLeft: -5,
+    width: 10, height: 10,
+    borderRadius: 5,
+    backgroundColor: colors.paper,
+    borderWidth: 2,
+    borderColor: colors.ink,
+    zIndex: 2,
+  },
+
+  regionChip: {
+    ...pixelBorder,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: colors.panel,
+  },
+  regionText: {
+    fontFamily: fonts.regular,
+    fontSize: 12,
+    color: colors.ink,
+    letterSpacing: 1,
+  },
+
   heroCopy: { marginBottom: 20 },
-  eyebrow: { fontSize: 11, letterSpacing: 1.5, color: "#888", marginBottom: 8 },
-  title: { fontSize: 30, fontWeight: "800", lineHeight: 36 },
-  titleEm: { fontStyle: "italic", color: "#e33" },
-  subtitle: { fontSize: 14, color: "#555", marginTop: 8 },
+  eyebrow: {
+    fontFamily: fonts.regular,
+    fontSize: 12,
+    color: colors.gray,
+    letterSpacing: 2,
+    marginBottom: 8,
+  },
+  title: {
+    fontFamily: fonts.bold,
+    fontSize: 32,
+    lineHeight: 36,
+    color: colors.ink,
+  },
+  titleAccent: {
+    color: colors.red,
+  },
+  subtitle: {
+    fontFamily: fonts.regular,
+    fontSize: 14,
+    color: colors.ink,
+    marginTop: 10,
+  },
+
+  searchRow: {
+    flexDirection: "row",
+    gap: 8,
+    alignItems: "stretch",
+  },
   searchBox: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f2f2f4",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
     gap: 8,
+    backgroundColor: colors.paper,
+    paddingHorizontal: 10,
+    ...pixelBorder,
   },
-  input: { flex: 1, paddingVertical: 10, fontSize: 14 },
-  searchBtn: {
-    backgroundColor: "#111",
+  input: {
+    flex: 1,
+    fontFamily: fonts.regular,
+    fontSize: 16,
+    color: colors.ink,
+    paddingVertical: 10,
+  },
+  button: {
+    backgroundColor: colors.red,
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 10,
+    justifyContent: "center",
+    ...pixelBorder,
+    ...pixelShadow,
   },
-  searchBtnPressed: { opacity: 0.7 },
-  searchBtnText: { color: "#fff", fontWeight: "600", fontSize: 13 },
-  error: { color: "#d33", marginTop: 10, fontSize: 13 },
+  buttonPressed: {
+    transform: [{ translateX: 3 }, { translateY: 3 }],
+    shadowOffset: { width: 0, height: 0 },
+    elevation: 0,
+  },
+  buttonDisabled: { opacity: 0.5 },
+  buttonText: {
+    fontFamily: fonts.bold,
+    fontSize: 14,
+    color: colors.paper,
+    letterSpacing: 1,
+  },
+
+  errorBox: {
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: "#FFE0D8",
+    borderWidth: 3,
+    borderColor: colors.redDark,
+  },
+  errorText: {
+    fontFamily: fonts.bold,
+    fontSize: 12,
+    color: colors.redDark,
+  },
 })
