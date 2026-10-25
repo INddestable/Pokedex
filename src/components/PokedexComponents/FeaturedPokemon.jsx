@@ -11,7 +11,7 @@ export default function FeaturedPokemon({ pokemon, onShowDetails }) {
     <View style={styles.wrap}>
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.headerLabel}>CURRENT SELECTION</Text>
+          <Text style={styles.headerLabel}>SELECCION ACTUAL</Text>
           {pokemon && (
             <Text style={styles.headerNumber}>
               #{String(pokemon.id).padStart(4, "0")}
@@ -32,7 +32,7 @@ export default function FeaturedPokemon({ pokemon, onShowDetails }) {
 
         <View style={styles.cardFooter}>
           <Text style={styles.name} numberOfLines={1}>
-            {pokemon ? formatName(pokemon.name) : "LOADING..."}
+            {pokemon ? formatName(pokemon.name) : "CARGANDO..."}
           </Text>
           <Pressable
             onPress={onShowDetails}
@@ -43,7 +43,7 @@ export default function FeaturedPokemon({ pokemon, onShowDetails }) {
               !pokemon && styles.detailBtnDisabled,
             ]}
           >
-            <Text style={styles.detailBtnText}>VIEW DETAILS ▶</Text>
+            <Text style={styles.detailBtnText}>VER DETALLES ▶</Text>
           </Pressable>
         </View>
       </View>

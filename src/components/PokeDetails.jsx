@@ -28,7 +28,7 @@ const image =
           >
             <ArrowIcon size={20} color={colors.ink} />
           </Pressable>
-          <Text style={styles.eyebrow}>NATIONAL POKÉDEX</Text>
+          <Text style={styles.eyebrow}>POKÉDEX NACIONAL</Text>
           <Text style={styles.headerNumber}>
             #{String(pokemon.id).padStart(4, "0")}
           </Text>
@@ -36,7 +36,7 @@ const image =
 
         <View style={styles.hero}>
           <View style={{ flex: 1 }}>
-            <Text style={styles.kicker}>SELECTED POKÉMON</Text>
+            <Text style={styles.kicker}>POKÉMON SELECCIONADO</Text>
             <Text style={styles.title} numberOfLines={2}>
               {formatName(pokemon.name)}
             </Text>
@@ -67,26 +67,26 @@ const image =
 
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardHeaderText}>BASE INFO</Text>
+            <Text style={styles.cardHeaderText}>INFORMACION BASE</Text>
           </View>
           <View style={styles.cardBody}>
-            <Text style={styles.cardTitle}>CHARACTERISTICS</Text>
+            <Text style={styles.cardTitle}>CARACTERISTICAS</Text>
             <View style={styles.measureGrid}>
               <View style={styles.measure}>
                 <Text style={styles.measureValue}>{pokemon.height / 10} m</Text>
-                <Text style={styles.measureLabel}>HEIGHT</Text>
+                <Text style={styles.measureLabel}>ALTURA</Text>
               </View>
               <View style={styles.measure}>
                 <Text style={styles.measureValue}>{pokemon.weight / 10} kg</Text>
-                <Text style={styles.measureLabel}>WEIGHT</Text>
+                <Text style={styles.measureLabel}>PESO</Text>
               </View>
               <View style={styles.measure}>
                 <Text style={styles.measureValue}>{pokemon.base_experience}</Text>
-                <Text style={styles.measureLabel}>BASE EXP</Text>
+                <Text style={styles.measureLabel}>EXPERIENCIA BASE</Text>
               </View>
             </View>
             <View style={styles.divider} />
-            <Text style={styles.measureLabel}>ABILITIES</Text>
+            <Text style={styles.measureLabel}>HABILIDADES</Text>
             <Text style={styles.abilitiesText}>
               {pokemon.abilities
                 .map(
@@ -100,10 +100,10 @@ const image =
 
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardHeaderText}>PERFORMANCE</Text>
+            <Text style={styles.cardHeaderText}>RENDIMIENTO</Text>
           </View>
           <View style={styles.cardBody}>
-            <Text style={styles.cardTitle}>BASE STATS</Text>
+            <Text style={styles.cardTitle}>ESTADISTICAS BASE</Text>
             <View style={styles.stats}>
               {pokemon.stats.map(({ base_stat, stat }) => {
                 const filled = Math.round(
