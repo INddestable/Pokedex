@@ -23,7 +23,7 @@ export default function Pokedex({ onShowDetails }) {
       setPokemon(data)
       setQuery("")
     } catch {
-      setError("Pokémon not found. Check the name or ID.")
+      setError("Pokémon no encontrado, revisa el Nombre o el ID")
     } finally {
       setLoading(false)
     }
@@ -35,7 +35,7 @@ export default function Pokedex({ onShowDetails }) {
         setPokemonList(list)
         setPokemon(initialPokemon)
       })
-      .catch(() => setError("Could not connect to PokéAPI."))
+      .catch(() => setError("No se pudo conectar a PokeApi"))
       .finally(() => setLoading(false))
   }, [])
 

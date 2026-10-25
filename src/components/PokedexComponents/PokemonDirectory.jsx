@@ -40,8 +40,8 @@ export default function PokemonDirectory({
         <>
           {header}
           <View style={styles.dirHeader}>
-            <Text style={styles.dirKicker}>DIRECTORY</Text>
-            <Text style={styles.dirTitle}>ALL POKÉMON</Text>
+            <Text style={styles.dirKicker}>DIRECTIORIO</Text>
+            <Text style={styles.dirTitle}>POKÉMONES REGISTRADOS</Text>
           </View>
           <View style={styles.searchBox}>
             <SearchIcon size={16} color={colors.ink} />
@@ -56,7 +56,7 @@ export default function PokemonDirectory({
           </View>
         </>
       }
-      ListEmptyComponent={<Text style={styles.empty}>NO POKÉMON MATCH.</Text>}
+      ListEmptyComponent={<Text style={styles.empty}>NO SE ENCONTRO EL POKÉMON.</Text>}
       contentContainerStyle={styles.content}
       initialNumToRender={20}
       windowSize={10}

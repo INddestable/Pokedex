@@ -17,13 +17,13 @@ export default function Hero({ query, setQuery, loading, error, onSubmit }) {
       </View>
 
       <View style={styles.heroCopy}>
-        <Text style={styles.eyebrow}>EXPLORE · DISCOVER · COLLECT</Text>
+        <Text style={styles.eyebrow}>EXPLORAR · DESCUBRIR · COLECCIONAR</Text>
         <Text style={styles.title}>
-          FIND YOUR{"\n"}
+          ENCUENTRA TU{"\n"}
           <Text style={styles.titleEm}>POKÉMON</Text>.
         </Text>
         <Text style={styles.subtitle}>
-          Search by name or Pokédex number.
+          Buscar por Nombre o Id del pokemón.
         </Text>
       </View>
 
@@ -33,7 +33,7 @@ export default function Hero({ query, setQuery, loading, error, onSubmit }) {
           <TextInput
             value={query}
             onChangeText={setQuery}
-            placeholder="e.g. Pikachu or 025"
+            placeholder="e.j. Pikachu o 025"
             placeholderTextColor={colors.gray}
             style={styles.input}
             autoCapitalize="none"
@@ -50,7 +50,7 @@ export default function Hero({ query, setQuery, loading, error, onSubmit }) {
             loading && styles.buttonDisabled,
           ]}
         >
-          <Text style={styles.buttonText}>SEARCH</Text>
+          <Text style={styles.buttonText}>BUSCAR</Text>
         </Pressable>
       </View>
 
