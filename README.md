@@ -194,4 +194,4 @@ Pokémon y todos los nombres relacionados son marcas registradas de
 Nintendo / Game Freak / Creatures Inc. Este proyecto es solo con fines
 educativos y no está afiliado a ninguna de estas compañías.
 
-<p align="center"> Hecho con ❤️ y muchos <code>borderWidth: 3</code>. </p> ```
+<p align="center"> Hecho con ❤️ y muchos <code>borderWidth: 3</code>. </p>
